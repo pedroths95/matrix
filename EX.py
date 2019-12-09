@@ -74,19 +74,6 @@ def matrix_mult(A,B):
             for k in range(cA): # k range in A colunms
                 C[i][j]+=A[i][k]*B[k][j]
     return C
-def copy_matrix(A):
-    """
-    Creates and returns a copy of a matrix.
-    param A   : The matrix to be copied
-    return    : Copy of A of the given matrix
-    """
-    row=len(M)
-    col=len(M[0])
-    MC=zeros_matrix(row, col)
-    for i in range(row):
-        for j in range(col):
-            MC[i][j] = M[i][j]
-    return MC
 
 def determinant(A,t=0):
     """ Calculate a determinant recursively
@@ -110,7 +97,7 @@ def determinant(A,t=0):
         N_cols=len(sub_matrix)
         for col in range(N_cols): # loop on colunms
             sub_matrix[col]=sub_matrix[col][0:row]+sub_matrix[col][row+1:] # Remove colunm
-        sign=(-1)**(row%2)
+        sign=(-1)**(row%2) # sub_det is None?
         sub_det=determinant(sub_matrix)
         t+=sign*A[0][row]*sub_det 
     return t
