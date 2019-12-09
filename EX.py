@@ -8,9 +8,14 @@ from numpy.linalg import inv
 from numpy.linalg import solve
 from numpy.linalg import det
 import copy
+np.set_printoptions(precision=2)
+np.set_printoptions(formatter={"float_kind": lambda x: "%g" % x})
 seed(7)
 matrix=[]
 n=7
+class float2(float):
+    def __repr__(self):
+        return "%0.2f" % self
 def make_square_matrix(n): # n rows m colunms matrix
     """Make an NxN square matrix with non-null determinant
     Row: Plus 1
@@ -45,8 +50,13 @@ def print_matrix(A,name):
     name: string of the matrix name to print
     """
     print('          '+ name)
-    for i in A:
-        print(i)
+#    for i in range(A):
+#        A_format=map(float2,A[0])
+#    fmt_A = ["%.2f" % row for row in A]
+    for i in range(n):
+        i_fmt=["%.2f" % col_element for col_element in A[i]]
+        print(i_fmt)
+    print()
 def matrix_mult(A,B):
     """ Multiply two matrices A and B into C
     rA: A rows
@@ -186,8 +196,8 @@ A=make_square_matrix(n)
 #A_t=[[A[j][i] 
 #    for j in range(len(A))]
 #    for i in range(len(A[0]))]
-print(determinant(A),' Calculated determinant')
-print(det(A),' Numpy determinant')
+print("{0:.2f}".format(round(determinant(A))),' Calculated determinant')
+print("{0:.2f}".format(round(det(A))),' Numpy determinant')
 A_t=transpose_matrix(A)
 # Answers below
 print_matrix(A,'A')
@@ -198,9 +208,20 @@ RESP_B=get_inverse(A)
 print_matrix(RESP_B,'Answer B: Inverse of A is = ') 
 seed(23)
 B=make_square_matrix(n)
+print_matrix(B,'B')
 det_C,x=gauss(A,B)
-print(' Values of x = ',x)
-print(' Determinant = ',det_C)
-print(' Numpy solution =',solve(A,B))
+print_matrix(x,' x with Gaussian Elimination ')
+print_matrix(solve(A,B),' x with Numpy       ')
+#print("{0:.2f}".format(x))
+#print(' Values of x = ',x)
+print(' Determinant = ',"{0:.2f}".format(round(det_C)))
+#print(' Numpy solution = ',solve(A,B))
+#print(' A times inverse =',matrix_mult(A,RESP_B))
+#print(' Inverse times A=',matrix_mult(RESP_B,A))
+AiA=(matrix_mult(RESP_B,A))
+AAi=(matrix_mult(A,RESP_B))
+print_matrix(AiA,' Inverse of A times A')
+print_matrix(AAi,' A times inverse of A')
+
 
 
