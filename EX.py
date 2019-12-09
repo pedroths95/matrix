@@ -10,24 +10,10 @@ matrix=[]
 n=7
 def make_square_matrix(n): # n rows m colunms matrix
     """Make an NxN square matrix with non-null determinant
-    Loop in i: For each row
-    Loop in j: For each colunm
-    If i == j: Elements of the diagonal
-    else     : Off-diagonal elements
+    Row: Plus 1
+    Col: n times 0.125
     """
-    A=[]
-    row=[]
-    for i in range(n):
-        for j in range(n):
-            if i == j: # Non null determinant
-                f=random()
-                #row.append("{0:.2f}".format(f))
-            else:
-                seed(9)
-                g=random()
-                #row.append('{0:+7.3f}'.format(g))
-        A.append(row)
-    print_matrix(A,'A')
+    A=[[1+0.125*j for i in np.linspace(0.125,8)] for j in np.linspace(0.125,8)]
     return A
 def test_matrix(A,name): # Compare A with A transpose
     """ Count how many rows are equal in A and A transpose
@@ -60,7 +46,6 @@ def matrix_mult(A,B):
     cB: B colunms
     C:  Initially an NxN zero matrix
     """
-
     # Number of rows and colunms and a list of 0 in 'C'
     rA=len(A)
     cA=len(A[0])
@@ -79,22 +64,24 @@ def determinant(A,t=0):
     """ Calculate a determinant recursively
     A         : Matrix to calculate the determinant
     t         : The total value of the determinant
-    row       : Index for the rows
+    row       : Row loop element
+    col       : Col loop element
     sub_matrix: Cut off the first row
     N_cols    : Length of sub_matrix
-    col       : Index for the colunms
     sign      : Depends on the index, (even > 0, odd < 0)
     sub_det   : Recursive determinant of sub_matrix
     """
 
     index=list(range(len(A)))
-    # 2X2 Matrix
+    # 2X2 Matrix Case
     if len(A) == 2 and len(A[0]) == 2:
         det_2d=A[0][0]*A[1][1]-A[0][1]*A[1][0]
         return det_2d
     for row in index:
         sub_matrix=A[1:] # Cut the first row
         N_cols=len(sub_matrix)
+        print(N_cols)
+        print(sub_matrix,' Submatrix of N_cols = ',N_cols)
         for col in range(N_cols): # loop on colunms
             sub_matrix[col]=sub_matrix[col][0:row]+sub_matrix[col][row+1:] # Remove colunm
         sign=(-1)**(row%2) # sub_det is None?
