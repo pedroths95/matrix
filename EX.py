@@ -13,9 +13,7 @@ np.set_printoptions(formatter={"float_kind": lambda x: "%g" % x})
 seed(7)
 matrix=[]
 n=7
-class float2(float):
-    def __repr__(self):
-        return "%0.2f" % self
+#n=2
 def make_square_matrix(n): # n rows m colunms matrix
     """Make an NxN square matrix with non-null determinant
     Row: Plus 1
@@ -132,8 +130,6 @@ def transpose_matrix(A):
             row.append(A[j][i])
         A_t.append(row)
     return A_t
-        
-
 def get_minor(A,i,j):
     return [row[:j] + row[j+1:] for row in (A[:i]+A[i+1:])]
 def get_inverse(A):
@@ -143,62 +139,59 @@ def get_inverse(A):
                 [-1*A[1][0]/d, A[0][0]/d]]
     cofactors=[]
     for r in range(len(A)):
-        cofactorRow=[]
+        cofactor_row=[]
         for c in range(len(A)):
             minor=get_minor(A,r,c)
-            cofactorRow.append(((-1)**(r+c))*determinant(minor))
-        cofactors.append(cofactorRow)
+            cofactor_row.append(((-1)**(r+c))*determinant(minor))
+        cofactors.append(cofactor_row)
     cofactors=transpose_matrix(cofactors)
     for r in range(len(cofactors)):
         for c in range(len(cofactors)):
             cofactors[r][c]=cofactors[r][c]/d
     return cofactors
-def gauss(a, b):
-    a = copy.deepcopy(a)
-    b = copy.deepcopy(b)
-    n = len(a)
-    p = len(b[0])
-    det = 1
-    for i in range(n - 1):
-        k = i
-        for j in range(i + 1, n):
+def gauss_elim(a,b):
+    a=copy.deepcopy(a)
+    b=copy.deepcopy(b)
+    n=len(a)
+    p=len(b[0])
+    det=1
+    for i in range(n-1):
+        k=i
+        for j in range(i+1,n):
             if abs(a[j][i]) > abs(a[k][i]):
-                k = j
+                k=j
         if k != i:
-            a[i], a[k] = a[k], a[i]
-            b[i], b[k] = b[k], b[i]
-            det = -det
+            a[i],a[k]=a[k],a[i]
+            b[i],b[k]=b[k],b[i]
+            det=-det
 
-        for j in range(i + 1, n):
+        for j in range(i+1,n):
             t = a[j][i]/a[i][i]
-            for k in range(i + 1, n):
-                a[j][k] -= t*a[i][k]
+            for k in range(i+1,n):
+                a[j][k]-=t*a[i][k]
             for k in range(p):
-                b[j][k] -= t*b[i][k]
+                b[j][k]-=t*b[i][k]
 
-    for i in range(n - 1, -1, -1):
-        for j in range(i + 1, n):
-            t = a[i][j]
+    for i in range(n-1,-1,-1):
+        for j in range(i+1,n):
+            t=a[i][j]
             for k in range(p):
-                b[i][k] -= t*b[j][k]
-        t = 1/a[i][i]
-        det *= a[i][i]
+                b[i][k]-=t*b[j][k]
+        t=1/a[i][i]
+        det*=a[i][i]
         for j in range(p):
-            b[i][j] *= t
+            b[i][j]*=t
     return det, b
 
 
-
-# Make the matrix and print it
 A=make_square_matrix(n)
 #test_matrix(A,'A') # Matrix A is being tested
-# List comprehension to make transpose matrix
-#A_t=[[A[j][i] 
-#    for j in range(len(A))]
-#    for i in range(len(A[0]))]
 print("{0:.2f}".format(round(determinant(A))),' Calculated determinant')
 print("{0:.2f}".format(round(det(A))),' Numpy determinant')
 A_t=transpose_matrix(A)
+
+
+
 # Answers below
 print_matrix(A,'A')
 print_matrix(A_t,'A transpose')
@@ -206,18 +199,15 @@ RESP_A=matrix_mult(A,A_t)
 print_matrix(RESP_A,'Answer A: A times A transpose = ')
 RESP_B=get_inverse(A)
 print_matrix(RESP_B,'Answer B: Inverse of A is = ') 
-seed(23)
-B=make_square_matrix(n)
-print_matrix(B,'B')
-det_C,x=gauss(A,B)
-print_matrix(x,' x with Gaussian Elimination ')
-print_matrix(solve(A,B),' x with Numpy       ')
-#print("{0:.2f}".format(x))
-#print(' Values of x = ',x)
+B=[[1,2,3,4,5,6,7]]
+#seed(23)
+#B=make_square_matrix(n)
+#print_matrix(B,'B')
+print(B)
+det_C,x=gauss_elim(A,B)
+print_matrix(x,' x, Answer C,  with Gaussian Elimination ')
+print_matrix(solve(A,B),' x, Answer C, with Numpy       ')
 print(' Determinant = ',"{0:.2f}".format(round(det_C)))
-#print(' Numpy solution = ',solve(A,B))
-#print(' A times inverse =',matrix_mult(A,RESP_B))
-#print(' Inverse times A=',matrix_mult(RESP_B,A))
 AiA=(matrix_mult(RESP_B,A))
 AAi=(matrix_mult(A,RESP_B))
 print_matrix(AiA,' Inverse of A times A')
