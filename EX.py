@@ -74,24 +74,20 @@ def matrix_mult(A,B):
             for k in range(cA): # k range in A colunms
                 C[i][j]+=A[i][k]*B[k][j]
     return C
+
 def copy_matrix(A):
     """    A: matrix to be copied
-    Returns :  A copy of A
-    """
-    A_copy=[[]]
-    for row in A:
-        for col in (A[0]):
-            A_copy[i][j]=A[i][j]
-    return A_copy
-#def gauss_elim(A):
-#    for row in range(n): # Search for maximum in row
-#        #k=i+1
-#        max_el=np.abs(A[row])
-#        for col in range(n):
-#            if A[row][col] > max_el:
-#                max_el=A[k][row]
-#                max_row=k
+    Returns :  A copy of matrix A
 
+    """
+    row=len(A)
+    col=len(A[0])
+    A_copy=[[0 for i in range(row)] for j in range(col)]
+     
+    for i in range(row):
+        for j in range(col):
+            A_copy[i][j] = A[i][j]
+    return A_copy
 
 def determinant(A,t=0):
     """ Calculate a determinant recursively
@@ -120,6 +116,7 @@ def determinant(A,t=0):
         sub_det=determinant(sub_matrix)
         t+=sign*A[0][row]*sub_det 
     return t
+
 def transpose_matrix(A):
     A_t=[]
     for i in range(n):
@@ -128,13 +125,15 @@ def transpose_matrix(A):
             row.append(A[j][i])
         A_t.append(row)
     return A_t
+
 def get_minor(A,i,j):
     return [row[:j] + row[j+1:] for row in (A[:i]+A[i+1:])]
+
 def get_inverse(A):
     d=determinant(A)
-#    if len(A) == 2:
-#        return [[A[1][1]/d, -1*A[0][1]/d],
-#                [-1*A[1][0]/d, A[0][0]/d]]
+    #if len(A) == 2:
+    #    return [[A[1][1]/d, -1*A[0][1]/d],
+    #            [-1*A[1][0]/d, A[0][0]/d]]
     cofactors=[]
     for r in range(len(A)):
         cofactor_row=[]
@@ -146,9 +145,12 @@ def get_inverse(A):
     for r in range(len(cofactors)):
         for c in range(len(cofactors)):
             cofactors[r][c]=cofactors[r][c]/d
-    return cofactors
+    return cofactors 
+
 def gauss_elim(a,b):
-    a=copy.deepcopy(a)
+    a=copy_matrix(a)
+    #b=copy_matrix(b)
+    #a=copy.deepcopy(a)
     b=copy.deepcopy(b)
     n=len(a)
     p=len(b[0])
@@ -181,13 +183,11 @@ def gauss_elim(a,b):
             b[i][j]*=t
     return det, b
 
-
 A=make_square_matrix(n)
-test_matrix(A,'A') # Matrix A is being tested
+test_matrix(A,'A') # Matrix A is being tested (singular)
 print("{0:.2f}".format(round(determinant(A))),' Calculated determinant')
 print("{0:.2f}".format(round(det(A))),' Numpy determinant')
 A_t=transpose_matrix(A)
-
 
 
 # Answers below
@@ -196,20 +196,22 @@ print_matrix(A_t,'A transpose')
 RESP_A=matrix_mult(A,A_t)
 print_matrix(RESP_A,'Answer A: A times A transpose = ')
 RESP_B=get_inverse(A)
+AiA=(matrix_mult(RESP_B,A))
+print_matrix(AiA,' Inverse of A times A')
 print_matrix(np.dot(A,A_t),' A times A transpose with Numpy = ')
 print_matrix(RESP_B,'Answer B: Inverse of A is = ') 
-B=[[1,2,3,4,5,6,7]]
+B=[[1],[2],[3],[4],[5],[6],[7]]
 #seed(23)
 #B=make_square_matrix(n)
 #print_matrix(B,'B')
 print(B)
-#det_C,x=gauss_elim(A,B)
-#print_matrix(x,' x, Answer C,  with Gaussian Elimination ')
-#print_matrix(solve(A,B),' x, Answer C, with Numpy       ')
+A_start=A
+det_C,x=gauss_elim(A,B)
+A=A_start
+print_matrix(x,' x, Answer C,  with Gaussian Elimination ')
+print_matrix(solve(A,B),' x, Answer C, with Numpy       ')
 #print(' Determinant = ',"{0:.2f}".format(round(det_C)))
-AiA=(matrix_mult(RESP_B,A))
 AAi=(matrix_mult(A,RESP_B))
-print_matrix(AiA,' Inverse of A times A')
 print_matrix(AAi,' A times inverse of A')
 
 
