@@ -191,31 +191,29 @@ def gauss_elim(A,b):
         for j in range(p):
             b[i][j]*=t
     return det, b
-
-A=make_square_matrix(n)
-test_matrix(A,'A') # Matrix A is being tested as singular
-print("{0:.2f}".format(round(determinant(A))),' Calculated determinant')
-print("{0:.2f}".format(round(det(A))),' Numpy determinant')
-A_t=transpose_matrix(A)
-
-
+if __name__ == "__main__":
+    A=make_square_matrix(n)
+    test_matrix(A,'A') # Matrix A is being tested as singular
+    print("{0:.2f}".format(round(determinant(A))),' Calculated determinant')
+    print("{0:.2f}".format(round(det(A))),' Numpy determinant')
+    A_t=transpose_matrix(A)
 # Answers below
-print_matrix(A,'A')
-print_matrix(A_t,'A transpose')
-b=[[1],[2],[3],[4],[5],[6],[7]]
-print('b vector = ',b)
-RESP_A=matrix_mult(A,A_t)
-print_matrix(RESP_A,'Answer A: A times A transpose = ')
-RESP_B=get_inverse(A)
-AiA=(matrix_mult(RESP_B,A))
-print_matrix(AiA,' Inverse of A times A')
-print_matrix(np.dot(A,A_t),' A times A transpose with Numpy = ')
-print_matrix(RESP_B,'Answer B: Inverse of A is = ') 
-det_C,x=gauss_elim(A,b)
-print_matrix(x,' x, Answer C,  with Gaussian Elimination ')
-print_matrix(solve(A,b),' x, Answer C, with Numpy       ')
-AAi=(matrix_mult(A,RESP_B))
-print_matrix(AAi,' A times inverse of A')
+    print_matrix(A,'A')
+    print_matrix(A_t,'A transpose')
+    b=[[1],[2],[3],[4],[5],[6],[7]]
+    print('b vector = ',b)
+    RESP_A=matrix_mult(A,A_t)
+    print_matrix(RESP_A,'Answer A: A times A transpose = ')
+    RESP_B=get_inverse(A)
+    AiA=(matrix_mult(RESP_B,A))
+    print_matrix(AiA,' Inverse of A times A')
+    print_matrix(np.dot(A,A_t),' A times A transpose with Numpy = ')
+    print_matrix(RESP_B,'Answer B: Inverse of A is = ') 
+    det_C,x=gauss_elim(A,b)
+    print_matrix(x,' x, Answer C,  with Gaussian Elimination ')
+    print_matrix(solve(A,b),' x, Answer C, with Numpy       ')
+    AAi=(matrix_mult(A,RESP_B))
+    print_matrix(AAi,' A times inverse of A')
 
 
 
